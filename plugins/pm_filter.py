@@ -224,8 +224,7 @@ async def cb_handler(client: Deadpool, query: CallbackQuery):
 
         await query.message.edit_text(
             f"Group Name : **{title}**\nGroup ID : `{group_id}`",
-            reply_markup=keyboard,
-            parse_mode="md"
+            reply_markup=keyboard
         )
         return await query.answer('Piracy Is Crime')
     elif "connectcb" in query.data:
@@ -243,8 +242,7 @@ async def cb_handler(client: Deadpool, query: CallbackQuery):
 
         if mkact:
             await query.message.edit_text(
-                f"Connected to **{title}**",
-                parse_mode="md"
+                f"Connected to **{title}**"
             )
         else:
             await query.message.edit_text('Some error occurred!!', parse_mode="md")
