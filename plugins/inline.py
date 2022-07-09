@@ -74,7 +74,7 @@ async def answer(bot, query):
                 reply_markup=reply_markup))
 
     if results:
-        switch_pm_text = f"{emoji.FILE_FOLDER} Results - {total + 2000000} "
+        switch_pm_text = f"{emoji.FILE_FOLDER} Results - {total + 200000} "
         if string:
             switch_pm_text += f" for {string}"
         try:
