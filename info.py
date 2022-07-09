@@ -44,9 +44,9 @@ COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Telegram_files')
 
 # Others
 CLEAN = is_enabled((environ.get('CLEAN', "True")), True)
-REQUEST_MODE = is_enabled((environ.get('REQUEST_MODE', "True")), True)
-CHANNEL_ON = is_enabled((environ.get('CHANNEL_ON', "True")), True)
-WLCM = environ.get("WLCM", "Hey {first}, Thank you for joining {chat}...")
+REQUEST_MODE = is_enabled((environ.get('REQUEST_MODE', "False")), True)
+CHANNEL_ON = is_enabled((environ.get('CHANNEL_ON', "False")), True)
+WLCM = environ.get("WLCM", "<b>Hey {first}, Thank you for joining {chat}</b>")
 LOG_CHANNEL = int(environ.get('LOG_CHANNEL', 0))
 GET_FILECHANNEL = int(environ.get('GET_FILECHANNEL', 0))
 SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'TeamEvamaria')
