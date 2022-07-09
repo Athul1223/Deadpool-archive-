@@ -510,7 +510,7 @@ async def cb_handler(client: Deadpool, query: CallbackQuery):
             InlineKeyboardButton('➕ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘs ➕', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
             ],[
             InlineKeyboardButton('🔍 sᴇᴀʀᴄʜ', switch_inline_query_current_chat=''),
-            InlineKeyboardButton('🤖 ᴜᴘᴅᴀᴛᴇs', url='https://t.me/kinsey_updates')
+            InlineKeyboardButton('🤖 ᴜᴘᴅᴀᴛᴇs', url='https://t.me/infame_updates')
             ],[
             InlineKeyboardButton('📚 ʜᴇʟᴘ', callback_data='help'),
             InlineKeyboardButton('ᴀʙᴏᴜᴛ 🔰', callback_data='about')
@@ -548,8 +548,8 @@ async def cb_handler(client: Deadpool, query: CallbackQuery):
         )
     elif query.data == "about":
         buttons = [[
-            InlineKeyboardButton('🤖 ᴜᴘᴅᴀᴛᴇs', url='https://t.me/kinsey_updates'),
-            InlineKeyboardButton('🏷️ ᴏᴜʀ ɢʀᴏᴜᴘ', url='https://t.me/InfameMovies')
+            InlineKeyboardButton('🤖 ᴜᴘᴅᴀᴛᴇs', url='https://t.me/infame_updates'),
+            InlineKeyboardButton('🏷️ ᴏᴜʀ ɢʀᴏᴜᴘ', url='https://t.me/InfameSeries')
         ], [
             InlineKeyboardButton('🏡 ʜᴏᴍᴇ', callback_data='start'),
             InlineKeyboardButton('🔐 ᴄʟᴏsᴇ', callback_data='close_data')
