@@ -805,7 +805,7 @@ async def cb_handler(client: Deadpool, query: CallbackQuery):
             ]
             reply_markup = InlineKeyboardMarkup(buttons)
             await query.message.edit_reply_markup(reply_markup)
-    await query.answer('Please Wait...')
+    await query.answer()
 
 async def auto_filter(client, msg, spoll=False):
     if not spoll:
