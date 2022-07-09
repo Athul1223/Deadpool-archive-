@@ -31,7 +31,7 @@ VALUEOFF = ["off", "false", "no", "disable"]
 
 @Deadpool.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
-    if message.chat.type in ['group', 'supergroup']:
+    if message.chat.type in [ChatType.GROUP, ChatType.SUPERGROUP]:
         buttons = [
             [
                 InlineKeyboardButton('🤖 Updates', url='https://t.me/infame_updates')
