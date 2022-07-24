@@ -7,6 +7,7 @@ import datetime
 import pytz
 import time
 import shutil
+import math
 
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 from .Script import script
@@ -96,18 +97,18 @@ async def next_page(bot, query):
     if n_offset == 0:
         btn.append(
             [InlineKeyboardButton("« ʙᴀᴄᴋ", callback_data=f"next_{req}_{key}_{off_set}"),
-             InlineKeyboardButton(f"📃 ᴘᴀɢᴇs {int(offset / 10) + 1} / {int(total / 10) + 1}",
+             InlineKeyboardButton(f"📃 ᴘᴀɢᴇs {math.ceil(int(offset) / 10) + 1} / {math.ceil(total / 10)}",
                                   callback_data="pages")]
         )
     elif off_set is None:
         btn.append(
-            [InlineKeyboardButton(f"📑 {int(offset / 10) + 1} / {int(total / 10) + 1}", callback_data="pages"),
+            [InlineKeyboardButton(f"📑 {math.ceil(int(offset) / 10) + 1} / {math.ceil(total / 10)}", callback_data="pages"),
              InlineKeyboardButton("ɴᴇxᴛ »", callback_data=f"next_{req}_{key}_{n_offset}")])
     else:
         btn.append(
             [
                 InlineKeyboardButton("« ʙᴀᴄᴋ", callback_data=f"next_{req}_{key}_{off_set}"),
-                InlineKeyboardButton(f"📑 {int(offset / 10) + 1} / {int(total / 10) + 1}", callback_data="pages"),
+                InlineKeyboardButton(f"📑 {math.ceil(int(offset) / 10) + 1} / {math.ceil(total / 10)}", callback_data="pages"),
                 InlineKeyboardButton("ɴᴇxᴛ »", callback_data=f"next_{req}_{key}_{n_offset}")
             ],
         )
@@ -118,6 +119,7 @@ async def next_page(bot, query):
     except MessageNotModified:
         pass
     await query.answer()
+
 
 
 @Deadpool.on_callback_query(filters.regex(r"^spolling"))
@@ -856,7 +858,7 @@ async def auto_filter(client, msg, spoll=False):
         BUTTONS[key] = search
         req = message.from_user.id if message.from_user else 0
         btn.append(
-            [InlineKeyboardButton(text=f"📃 1/{int(total_results / 10) + 1}", callback_data="pages"),
+            [InlineKeyboardButton(text=f"📃 1/{math.ceil(total_results / 10)}", callback_data="pages"),
              InlineKeyboardButton(text="ɴᴇxᴛ »", callback_data=f"next_{req}_{key}_{offset}")]
         )
     else:
