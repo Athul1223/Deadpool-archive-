@@ -1,7 +1,7 @@
 import logging
 import asyncio
 from pyrogram import Client as Deadpool, filters
-from pyrogram.enums import ChatType
+from pyrogram.enums import ChatType, MessageMediaType
 from pyrogram.errors import FloodWait
 from pyrogram.errors.exceptions.bad_request_400 import ChannelInvalid, ChatAdminRequired, UsernameInvalid, UsernameNotModified
 from plugins import temp, ADMINS
@@ -163,7 +163,7 @@ async def index_files_to_db(lst_msg_id, chat, msg, bot):
                 elif not message.media:
                     no_media += 1
                     continue
-                elif message.media not in [enums.MessageMediaType.VIDEO, enums.MessageMediaType.AUDIO, enums.MessageMediaType.DOCUMENT]:
+                elif message.media not in [MessageMediaType.VIDEO, MessageMediaType.AUDIO, MessageMediaType.DOCUMENT]:
                     unsupported += 1
                     continue
                 media = getattr(message, message.media.value, None)
