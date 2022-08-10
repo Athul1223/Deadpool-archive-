@@ -8,6 +8,7 @@ from plugins import temp, ADMINS
 from info import INDEX_REQ_CHANNEL as LOG_CHANNEL
 from database.ia_filterdb import save_file
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
 import re
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -79,7 +80,7 @@ async def send_for_index(bot, message):
     except:
         return await message.reply('Make Sure That Iam An Admin In The Channel, if channel is private')
     if k.empty:
-        return await message.reply('This may be a group and I am not an admin of the group.')
+        return await message.reply('This may be a group which I am not an admin.')
 
     if message.from_user.id in ADMINS:
         buttons = [
@@ -140,54 +141,46 @@ async def index_files_to_db(lst_msg_id, chat, msg, bot):
     errors = 0
     deleted = 0
     no_media = 0
+    unsupported = 0
     async with lock:
         try:
-            total = lst_msg_id + 1
             current = temp.CURRENT
             temp.CANCEL = False
-            while current < total:
+            async for message in bot.iter_messages(chat, lst_msg_id, temp.CURRENT):
                 if temp.CANCEL:
-                    await msg.edit("Succesfully Cancelled")
+                    await msg.edit(f"Successfully Cancelled!!\n\nSaved <code>{total_files}</code> files to dataBase!\nDuplicate Files Skipped: <code>{duplicate}</code>\nDeleted Messages Skipped: <code>{deleted}</code>\nNon-Media messages skipped: <code>{no_media + unsupported}</code>(Unsupported Media - `{unsupported}` )\nErrors Occurred: <code>{errors}</code>")
                     break
-                try:
-                    message = await bot.get_messages(chat_id=chat, message_ids=current, replies=0)
-                except FloodWait as e:
-                    await asyncio.sleep(e.x)
-                    message = await bot.get_messages(chat, current, replies=0)
-                except Exception as e:
-                    logger.exception(e)
-                try:
-                    for file_type in ("document", "video", "audio"):
-                        media = getattr(message, file_type, None)
-                        if media is not None:
-                            break
-                        else:
-                            continue
-                    media.file_type = file_type
-                    media.caption = message.caption
-                    aynav, vnay = await save_file(media)
-                    if aynav:
-                        total_files += 1
-                    elif vnay == 0:
-                        duplicate += 1
-                    elif vnay == 2:
-                        errors += 1
-                except Exception as e:
-                    if "NoneType" in str(e):
-                        if message.empty:
-                            deleted += 1
-                        elif not media:
-                            no_media += 1
-                        logger.warning("Skipping deleted / Non-Media messages (if this continues for long, use /setskip to set a skip number)")     
-                    else:
-                        logger.exception(e)
                 current += 1
                 if current % 20 == 0:
-                    can = [[InlineKeyboardButton('𝙲𝙰𝙽𝙲𝙴𝙻', callback_data='index_cancel')]]
+                    can = [[InlineKeyboardButton('Cancel', callback_data='index_cancel')]]
                     reply = InlineKeyboardMarkup(can)
-                    await msg.edit_text(text=f"• Total messages Fetched: <code>{current}</code>\n• Total messages Saved: <code>{total_files}</code>\n• Duplicate Files Skipped: <code>{duplicate}</code>\n• Deleted Messages Skipped: <code>{deleted}</code>\n Non-medias skipped: <code>{no_media}</code>\n• Error Occurred: <code>{errors}</code>", reply_markup=reply)
+                    await msg.edit_text(
+                        text=f"Total messages fetched: <code>{current}</code>\nTotal messages saved: <code>{total_files}</code>\nDuplicate Files Skipped: <code>{duplicate}</code>\nDeleted Messages Skipped: <code>{deleted}</code>\nNon-Media messages skipped: <code>{no_media + unsupported}</code>(Unsupported Media - `{unsupported}` )\nErrors Occurred: <code>{errors}</code>",
+                        reply_markup=reply)
+                if message.empty:
+                    deleted += 1
+                    continue
+                elif not message.media:
+                    no_media += 1
+                    continue
+                elif message.media not in [enums.MessageMediaType.VIDEO, enums.MessageMediaType.AUDIO, enums.MessageMediaType.DOCUMENT]:
+                    unsupported += 1
+                    continue
+                media = getattr(message, message.media.value, None)
+                if not media:
+                    unsupported += 1
+                    continue
+                media.file_type = message.media.value
+                media.caption = message.caption
+                aynav, vnay = await save_file(media)
+                if aynav:
+                    total_files += 1
+                elif vnay == 0:
+                    duplicate += 1
+                elif vnay == 2:
+                    errors += 1
         except Exception as e:
             logger.exception(e)
-            await msg.edit(f'Error: {e}')       
+            await msg.edit(f'Error: {e}')
         else:
-            await msg.edit(f'Succesfully saved <code>{total_files}</code> to dataBase!\nDuplicate Files Skipped: <code>{duplicate}</code>\nDeleted Messages Skipped: <code>{deleted}</code>\nNon-Media messages skipped: <code>{no_media}</code>\nErrors Occurred: <code>{errors}</code>')
+            await msg.edit(f'Succesfully saved <code>{total_files}</code> to dataBase!\nDuplicate Files Skipped: <code>{duplicate}</code>\nDeleted Messages Skipped: <code>{deleted}</code>\nNon-Media messages skipped: <code>{no_media + unsupported}</code>(Unsupported Media - `{unsupported}` )\nErrors Occurred: <code>{errors}</code>')
