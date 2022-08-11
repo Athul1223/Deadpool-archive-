@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from pyrogram import Client as Deadpool, filters
 from pyrogram.enums import ChatType, ChatMemberStatus
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
@@ -91,11 +92,11 @@ async def who_is(client, message):
     message_out_str += f"<b>➲Data Centre:</b> <code>{dc_id}</code>\n"
     message_out_str += f"<b>➲User Name:</b> @{username}\n"
     message_out_str += f"<b>➲User 𝖫𝗂𝗇𝗄:</b> <a href='tg://user?id={from_user.id}'><b>Click Here</b></a>\n"
-    if message.chat.type in (("supergroup", "channel")):
+    if message.chat.type in ((ChatType.SUPERGROUP, ChatType.CHANNEL)):
         try:
             chat_member_p = await message.chat.get_member(from_user.id)
             joined_date = datetime.fromtimestamp(
-                chat_member_p.joined_date or time.time()
+                chat_member_p.joined_date or datetime.time()
             ).strftime("%Y.%m.%d %H:%M:%S")
             message_out_str += (
                 "<b>➲Joined this Chat on:</b> <code>"
