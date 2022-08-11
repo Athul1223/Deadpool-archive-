@@ -95,7 +95,7 @@ async def who_is(client, message):
     if message.chat.type in ((ChatType.SUPERGROUP, ChatType.CHANNEL)):
         try:
             chat_member_p = await message.chat.get_member(from_user.id)
-            joined_date = datetime.fromtimestamp(
+            joined_date = (
                 chat_member_p.joined_date or datetime.time()
             ).strftime("%Y.%m.%d %H:%M:%S")
             message_out_str += (
