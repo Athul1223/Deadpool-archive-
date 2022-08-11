@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 from pyrogram import Client as Deadpool, filters
 from pyrogram.enums import ChatType, ChatMemberStatus
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
